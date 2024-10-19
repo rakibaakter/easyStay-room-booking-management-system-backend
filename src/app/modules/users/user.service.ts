@@ -2,6 +2,9 @@ import { TUser } from "./user.interface";
 import { User } from "./user.model";
 
 const createUserIntoDB = async (payload : TUser)=>{
+    // by default role assigned as user
+    payload.role = 'user';
+    
     const result = await User.create(payload);
 
     return result;

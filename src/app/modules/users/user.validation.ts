@@ -8,7 +8,9 @@ const userNameValidationSchema = z.object({
       .refine((value) => /^[A-Z]/.test(value), {
         message: "First Name must start with a capital letter",
       }),
-    lastName: z.string().min(1).max(20),
+    lastName: z.string().min(1).max(20).refine((value) => /^[A-Z]/.test(value), {
+      message: "Last Name must start with a capital letter",
+    }),
   });
 
 const createUserValidationSchema = z.object({

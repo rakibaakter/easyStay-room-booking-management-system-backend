@@ -6,5 +6,6 @@ export type TUserName = {
 export type TUser = {
     name : TUserName;
     email : string;
-    password : string
+    password : string;
+    role : "admin" | "user";
 }

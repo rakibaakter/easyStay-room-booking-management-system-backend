@@ -25,6 +25,7 @@ const userSchema =   new Schema<TUser>({
     name : {type : userNameSchema, required : [true, 'Name is required' ]},
     email : {type : String, required : [true, 'Name is required' ], unique : true},
     password : {type : String, required : [true, 'Password is required' ]},
+    role : {type : String, enum : ["admin" , 'user'], default: "user"},
 }, {
     toJSON : {
         virtuals : true
@@ -34,7 +35,7 @@ const userSchema =   new Schema<TUser>({
 
 // virtual for creating full name
 userSchema.virtual('fullName').get(function () {
-    return `${this.name.firstName + this.name.lastName}`;
+    return `${this.name.firstName +" " + this.name.lastName}`;
   });
 
 
