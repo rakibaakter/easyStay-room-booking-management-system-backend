@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { AnyZodObject } from "zod";
 
+
+// create validate middleware to handle error by global error handler
 const validateRequest = (schema: AnyZodObject) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
