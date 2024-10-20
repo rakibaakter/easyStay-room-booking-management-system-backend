@@ -15,10 +15,10 @@ const createBooking = catchAsync(async (req, res) => {
 
   // send response
   sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: "Your Booking confimed successfully!",
-    data: result,
+    statusCode: result.statusCode,
+    success: result.success,
+    message: result.message,
+    data: result.data,
   });
 });
 

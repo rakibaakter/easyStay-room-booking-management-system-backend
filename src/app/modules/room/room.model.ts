@@ -23,6 +23,11 @@ const roomSchema = new Schema<TRoom>({
     type: String,
     required: true,
   },
+  status: {
+    type: String,
+    enum: ["available", "unavailable"],
+    default: "available",
+  },
 });
 
 export const Room = model<TRoom>("Room", roomSchema);
