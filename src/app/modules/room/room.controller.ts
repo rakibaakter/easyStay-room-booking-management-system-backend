@@ -44,6 +44,23 @@ const getRoomById = catchAsync(async (req, res) => {
   });
 });
 
+// for update room
+const updateRoomById = catchAsync(async (req, res) => {
+  const payload = req.body;
+  const result = await roomServices.updateRoomByIdIntoDB(
+    req.params.id,
+    payload
+  );
+
+  // send response
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Room retrived successfully!",
+    data: result,
+  });
+});
+
 // for delete api
 const deletRoomById = catchAsync(async (req, res) => {
   const result = await roomServices.deletSingleRoomByIdFromDB(req.params.id);
@@ -61,5 +78,6 @@ export const roomControllers = {
   createRoom,
   getAllRoom,
   getRoomById,
+  updateRoomById,
   deletRoomById,
 };

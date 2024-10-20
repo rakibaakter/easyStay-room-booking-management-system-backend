@@ -19,6 +19,15 @@ const getSingleRoomByIdFromDB = async (id: string) => {
   return result;
 };
 
+// update room by admin
+const updateRoomByIdIntoDB = async (id: string, payload: Partial<TRoom>) => {
+  const updatedDoc = payload;
+
+  const result = await Room.findByIdAndUpdate(id, updatedDoc);
+
+  return result;
+};
+
 // delete single room by its id
 const deletSingleRoomByIdFromDB = async (id: string) => {
   const result = await Room.findByIdAndDelete(id);
@@ -29,5 +38,6 @@ export const roomServices = {
   createRoomIntoDB,
   getAllRoomFromDB,
   getSingleRoomByIdFromDB,
+  updateRoomByIdIntoDB,
   deletSingleRoomByIdFromDB,
 };

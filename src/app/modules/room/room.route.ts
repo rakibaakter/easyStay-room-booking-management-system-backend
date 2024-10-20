@@ -18,6 +18,13 @@ router.post(
 router.get("/", roomControllers.getAllRoom);
 // get single room by id
 router.get("/:id", roomControllers.getRoomById);
+// update by admin
+router.patch(
+  "/id",
+  auth(USER_ROLE.admin),
+  validateRequest(roomValidations.updateRoomValiadtionschema),
+  roomControllers.updateRoomById
+);
 // delete room by id
 router.delete("/:id", roomControllers.deletRoomById);
 
