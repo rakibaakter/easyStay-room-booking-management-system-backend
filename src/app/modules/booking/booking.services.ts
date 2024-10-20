@@ -42,30 +42,53 @@ const createBookingIntoDB = async (user: TDecodedUser, payload: TBooking) => {
 };
 
 // get all bookings from DB
-const getAllBookingFromDB = async (query: Record<string, any>) => {
-  console.log(query);
+const getAllBookingFromDB = async () => {
+  try {
+    const result = await Booking.find();
 
-  let result;
-  if (!Object.entries(query)) {
-    // find all bookings
-    result = await Booking.find().populate("user");
-    return result;
-  } else {
-    const queryUser = await User.findOne(query); // findOne to get a single user
-    if (!queryUser) {
-      throw new AppError(404, `No user found for the given query`);
+    if (!result.length) {
+      throw new AppError(404, "No bookings found!");
     }
 
-    // query the bookings by the user's ObjectId
-    result = await Booking.find({
-      user: queryUser._id,
-    }).populate("user");
+    return {
+      statusCode: 200,
+      success: true,
+      message: "Bookings are retrieved successfully!",
+      data: result,
+    };
+  } catch (error: any) {
+    const statusCode = error instanceof AppError ? error.statusCode : 500;
+    return {
+      statusCode,
+      success: false,
+      message: error.message || "Something Went Wrong",
+      data: null,
+    };
+  }
+};
 
-    // If no bookings are found
-    if (!result || result.length === 0) {
-      throw new AppError(404, `No bookings found for the user`);
+// get user specific bookings
+const getMyBookingsfromDB = async (user: TDecodedUser) => {
+  try {
+    const result = await Booking.find({ user: user.id });
+    if (!result.length) {
+      throw new AppError(404, "No bookings found!");
     }
-    return result;
+
+    return {
+      statusCode: 200,
+      success: true,
+      message: "Your Bookings are retrieved successfully!",
+      data: result,
+    };
+  } catch (error: any) {
+    const statusCode = error instanceof AppError ? error.statusCode : 500;
+    return {
+      statusCode,
+      success: false,
+      message: error.message || "Something Went Wrong",
+      data: null,
+    };
   }
 };
 
@@ -84,6 +107,7 @@ const deleteSingleBookingByIdFromDB = async (id: string) => {
 export const bookingServices = {
   createBookingIntoDB,
   getAllBookingFromDB,
+  getMyBookingsfromDB,
   getSingleBookingByIdFromDB,
   deleteSingleBookingByIdFromDB,
 };

@@ -14,11 +14,21 @@ router.post(
   validateRequest(bookingValidations.createBookingValidationSchema),
   bookingControllers.createBooking
 );
-// get all room
-router.get("/", bookingControllers.getAllBooking);
-// get single room by id
+// get all bookings
+router.get("/", auth(USER_ROLE.admin), bookingControllers.getAllBooking);
+// get user specific bookings
+router.get(
+  "/my-bokings",
+  auth(USER_ROLE.user),
+  bookingControllers.getUserBookings
+);
+// get single bookings by id
 router.get("/:id", bookingControllers.getBookingById);
-// delete room by id
-router.delete("/:id", bookingControllers.deleteBookingById);
+// delete bookings by id
+router.delete(
+  "/:id",
+  auth(USER_ROLE.admin),
+  bookingControllers.deleteBookingById
+);
 
 export const BookingRoutes = router;

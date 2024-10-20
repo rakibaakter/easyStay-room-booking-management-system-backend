@@ -1,5 +1,6 @@
 // call catchAsyc funtion for handle try catch in every controller
 
+import { JwtPayload } from "jsonwebtoken";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { TDecodedUser } from "./booking.interface";
@@ -22,18 +23,33 @@ const createBooking = catchAsync(async (req, res) => {
   });
 });
 
-// for get all api
+// for get all booking
 const getAllBooking = catchAsync(async (req, res) => {
-  const query = req.query;
+  //   const query = req.query;
 
-  const result = await bookingServices.getAllBookingFromDB(query);
+  const result = await bookingServices.getAllBookingFromDB();
 
   // send response
   sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: "Your Bookings are retrived successfully!",
-    data: result,
+    statusCode: result.statusCode,
+    success: result.success,
+    message: result.message,
+    data: result.data,
+  });
+});
+
+// for get all
+const getUserBookings = catchAsync(async (req, res) => {
+  const result = await bookingServices.getMyBookingsfromDB(
+    req.user as TDecodedUser
+  );
+
+  // send response
+  sendResponse(res, {
+    statusCode: result.statusCode,
+    success: result.success,
+    message: result.message,
+    data: result.data,
   });
 });
 
@@ -70,6 +86,7 @@ const deleteBookingById = catchAsync(async (req, res) => {
 export const bookingControllers = {
   createBooking,
   getAllBooking,
+  getUserBookings,
   getBookingById,
   deleteBookingById,
 };
