@@ -44,7 +44,7 @@ const createBookingIntoDB = async (user: TDecodedUser, payload: TBooking) => {
 // get all bookings from DB
 const getAllBookingFromDB = async () => {
   try {
-    const result = await Booking.find();
+    const result = await Booking.find().populate("user room");
 
     if (!result.length) {
       throw new AppError(404, "No bookings found!");
@@ -70,7 +70,7 @@ const getAllBookingFromDB = async () => {
 // get user specific bookings
 const getMyBookingsfromDB = async (user: TDecodedUser) => {
   try {
-    const result = await Booking.find({ user: user.id });
+    const result = await Booking.find({ user: user.id }).populate("user room");
     if (!result.length) {
       throw new AppError(404, "No bookings found!");
     }
