@@ -10,6 +10,16 @@ const createUserIntoDB = async (payload : TUser)=>{
     return result;
 }
 
+const getUserByIdfromDB = async(id : string )=>{
+    
+
+    const result = await User.findById(id);
+    
+    
+    return result;
+}
+
 export const userServices = {
-    createUserIntoDB
+    createUserIntoDB,
+    getUserByIdfromDB
 }

@@ -50,9 +50,9 @@ userSchema.pre("save", async function (next) {
   });
   
   // post save middleware / hook |hide password from DB
-  userSchema.post("save", function (doc, next) {
-    doc.password = "";
-    next();
-  });
+  // userSchema.post("save", function (doc, next) {
+  //   doc.password = "";
+  //   next();
+  // });
 
 export const User = model<TUser>("User", userSchema)
