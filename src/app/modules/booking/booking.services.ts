@@ -98,10 +98,25 @@ const getSingleBookingByIdFromDB = async (id: string) => {
   return result;
 };
 
+// update booking
+
 // delete single booking by its id
 const deleteSingleBookingByIdFromDB = async (id: string) => {
-  const result = await Booking.findByIdAndDelete(id);
-  return result;
+  try {
+    const session = await startSession();
+    return await session.withTransaction(async () => {
+      const result = await Booking.findByIdAndDelete(id).session(session);
+
+      // update room status to available
+      const updatedRoomStatus = await Room.findByIdAndUpdate(result?.room, {
+        status: "available",
+      }).session(session);
+
+      return result;
+    });
+  } catch (error: any) {
+    throw new AppError(500, "Something went wrong");
+  }
 };
 
 export const bookingServices = {
