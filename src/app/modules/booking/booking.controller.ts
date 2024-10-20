@@ -1,0 +1,75 @@
+// call catchAsyc funtion for handle try catch in every controller
+
+import catchAsync from "../../utils/catchAsync";
+import sendResponse from "../../utils/sendResponse";
+import { TDecodedUser } from "./booking.interface";
+import { bookingServices } from "./booking.services";
+
+// for post api
+const createBooking = catchAsync(async (req, res) => {
+  const { booking } = req.body;
+  const result = await bookingServices.createBookingIntoDB(
+    req.user as TDecodedUser,
+    booking
+  );
+
+  // send response
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Your Booking confimed successfully!",
+    data: result,
+  });
+});
+
+// for get all api
+const getAllBooking = catchAsync(async (req, res) => {
+  const query = req.query;
+
+  const result = await bookingServices.getAllBookingFromDB(query);
+
+  // send response
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Your Bookings are retrived successfully!",
+    data: result,
+  });
+});
+
+// for single get api
+const getBookingById = catchAsync(async (req, res) => {
+  const result = await bookingServices.getSingleBookingByIdFromDB(
+    req.params.id
+  );
+
+  // send response
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Booking info retrived successfully!",
+    data: result,
+  });
+});
+
+// for delete api
+const deleteBookingById = catchAsync(async (req, res) => {
+  const result = await bookingServices.deleteSingleBookingByIdFromDB(
+    req.params.id
+  );
+
+  // send response
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Booking deleted successfully!",
+    data: result,
+  });
+});
+
+export const bookingControllers = {
+  createBooking,
+  getAllBooking,
+  getBookingById,
+  deleteBookingById,
+};
