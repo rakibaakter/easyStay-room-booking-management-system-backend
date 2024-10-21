@@ -6,6 +6,27 @@ import Booking from "./booking.model";
 import { startSession } from "mongoose";
 import { Room } from "../room/room.model";
 
+
+
+/* current date 21 oct  
+-> an user booked a room for 25-27 oct 
+-> another user request same room for 22-24 ----it will be proceed
+-> if a new user requesting for the same room for 22-25 or any date from the first booked user date range --- it will be declined
+
+-> if an user requesting for the same room for any bookings of the room checkout date as the user's checkin date
+
+
+*/
+
+// preventing duplicate booking
+/*
+-> an user can not send request for same room for same date he/she already requested onece
+->
+
+
+*/
+
+
 // post data to booking collection into DB
 const createBookingIntoDB = async (user: TDecodedUser, payload: TBooking) => {
   try {

@@ -8,7 +8,7 @@ import sendResponse from "../../utils/sendResponse";
 // call catchAsyc funtion for handle try catch in every controller
 const createUser = catchAsync(async(req, res )=>{
 
-    const {user : userData} = req.body 
+    const userData= req.body 
     const result = await userServices.createUserIntoDB(userData);
 
 
