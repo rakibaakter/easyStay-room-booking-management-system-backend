@@ -12,9 +12,10 @@ const app = (0, express_1.default)();
 // parser
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({
-    origin: ['http://localhost:3000', 'https://easy-stay-five.vercel.app'], // Adjust this for your frontend's domain
+    origin: ['http://localhost:3000', 'https://easy-stay-five.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Authorization', 'Content-Type'],
+    credentials: true
 }));
 // application routers
 app.use("/api/", routes_1.default);

@@ -13,6 +13,6 @@ const user_constant_1 = require("./user.constant");
 const router = express_1.default.Router();
 router.post('/create-user', (0, validateRequest_1.default)(user_validation_1.userValidations.createUserValidationSchema), user_controller_1.userControllers.createUser);
 // router.post('/create-user',userControllers.createUser);
-router.get("/:id", (0, auth_1.default)(user_constant_1.USER_ROLE.user), user_controller_1.userControllers.getUserById);
+router.get("/:id", (0, auth_1.default)(user_constant_1.USER_ROLE.user, user_constant_1.USER_ROLE.admin), user_controller_1.userControllers.getUserById);
 // router.get("/:id", userControllers.getUserById)
 exports.UserRoutes = router;

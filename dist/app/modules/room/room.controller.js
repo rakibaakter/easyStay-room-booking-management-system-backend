@@ -19,7 +19,7 @@ const room_service_1 = require("./room.service");
 // call catchAsyc funtion for handle try catch in every controller
 // for post api
 const createRoom = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { room: roomData } = req.body;
+    const roomData = req.body;
     const result = yield room_service_1.roomServices.createRoomIntoDB(roomData);
     // send response
     (0, sendResponse_1.default)(res, {
@@ -31,7 +31,6 @@ const createRoom = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
 }));
 // for get all api
 const getAllRoom = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // console.log("token from client", req.headers.authorization);
     const result = yield room_service_1.roomServices.getAllRoomFromDB();
     // send response
     (0, sendResponse_1.default)(res, {

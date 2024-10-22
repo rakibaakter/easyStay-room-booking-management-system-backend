@@ -16,9 +16,9 @@ router.post("/create-booking", (0, auth_1.default)(user_constant_1.USER_ROLE.use
 // get all bookings
 router.get("/", (0, auth_1.default)(user_constant_1.USER_ROLE.admin), booking_controller_1.bookingControllers.getAllBooking);
 // get user specific bookings
-router.get("/my-bokings", (0, auth_1.default)(user_constant_1.USER_ROLE.user), booking_controller_1.bookingControllers.getUserBookings);
+router.get("/my-bookings", (0, auth_1.default)(user_constant_1.USER_ROLE.user), booking_controller_1.bookingControllers.getUserBookings);
 // get single bookings by id
 router.get("/:id", booking_controller_1.bookingControllers.getBookingById);
 // delete bookings by id
-router.delete("/:id", (0, auth_1.default)(user_constant_1.USER_ROLE.admin), booking_controller_1.bookingControllers.deleteBookingById);
+router.delete("/:id", (0, auth_1.default)(user_constant_1.USER_ROLE.admin, user_constant_1.USER_ROLE.user), booking_controller_1.bookingControllers.deleteBookingById);
 exports.BookingRoutes = router;

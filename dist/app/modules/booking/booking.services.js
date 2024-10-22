@@ -38,19 +38,42 @@ const createBookingIntoDB = (user, payload) => __awaiter(void 0, void 0, void 0,
     try {
         const session = yield (0, mongoose_1.startSession)();
         return yield session.withTransaction(() => __awaiter(void 0, void 0, void 0, function* () {
-            // check room existence
-            const requestedRoom = yield room_model_1.Room.findById(payload.room).session(session);
-            if (!requestedRoom || requestedRoom.status !== "available") {
-                throw new AppError_1.default(404, "This room is not available");
+            // Check if the same user has already requested the same room for the same time period
+            const userBookingConflict = yield booking_model_1.default.findOne({
+                user: user.id,
+                room: payload.room,
+                status: { $in: ["pending", "confirmed"] },
+                $or: [
+                    {
+                        checkInDate: { $lte: payload.checkOutDate },
+                        checkOutDate: { $gte: payload.checkInDate }
+                    },
+                ],
+            }).session(session);
+            if (userBookingConflict) {
+                throw new AppError_1.default(409, "You have already requested a booking for this room during the selected time period.");
             }
-            requestedRoom.status = "unavailable";
-            yield requestedRoom.save(); //update room status on room collection
-            const dataForDB = Object.assign(Object.assign({}, payload), { user: user.id });
+            // Check if there are any conflicting confirmed bookings from other users
+            const conflictingBooking = yield booking_model_1.default.findOne({
+                room: payload.room,
+                status: "confirmed",
+                $or: [
+                    {
+                        checkInDate: { $lte: payload.checkOutDate },
+                        checkOutDate: { $gte: payload.checkInDate }
+                    },
+                ],
+            }).session(session);
+            if (conflictingBooking) {
+                throw new AppError_1.default(409, "This room is already booked during the requested time.");
+            }
+            // Room status remains available for other requests until an admin confirms the booking
+            const dataForDB = Object.assign(Object.assign({}, payload), { user: user.id, status: "pending" });
             const result = yield booking_model_1.default.create([dataForDB], { session });
             return {
                 statusCode: 200,
                 success: true,
-                message: "Your booking has confirmed",
+                message: "Your booking request has been submitted for approval.",
                 data: result,
             };
         }));
@@ -63,7 +86,6 @@ const createBookingIntoDB = (user, payload) => __awaiter(void 0, void 0, void 0,
             message: error.message || "Something Went Wrong",
             data: null,
         };
-        // throw new AppError(500, "Internal Server Error");
     }
 });
 // get all bookings from DB

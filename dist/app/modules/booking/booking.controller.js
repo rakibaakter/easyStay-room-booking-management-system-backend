@@ -19,7 +19,7 @@ const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const booking_services_1 = require("./booking.services");
 // for post api
 const createBooking = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { booking } = req.body;
+    const booking = req.body;
     const result = yield booking_services_1.bookingServices.createBookingIntoDB(req.user, booking);
     // send response
     (0, sendResponse_1.default)(res, {
