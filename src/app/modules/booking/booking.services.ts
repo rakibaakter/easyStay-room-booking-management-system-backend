@@ -32,21 +32,48 @@ const createBookingIntoDB = async (user: TDecodedUser, payload: TBooking) => {
   try {
     const session = await startSession();
     return await session.withTransaction(async () => {
-      // check room existence
-      const requestedRoom = await Room.findById(payload.room).session(session);
 
-      if (!requestedRoom || requestedRoom.status !== "available") {
-        throw new AppError(404, "This room is not available");
+      // Check if the same user has already requested the same room for the same time period
+      const userBookingConflict = await Booking.findOne({
+        user: user.id,
+        room: payload.room,
+        status: { $in: ["pending", "confirmed"] },
+        $or: [
+          {
+            checkInDate: { $lte: payload.checkOutDate },
+            checkOutDate: { $gte: payload.checkInDate }
+          },
+        ],
+      }).session(session);
+
+      if (userBookingConflict) {
+        throw new AppError(409, "You have already requested a booking for this room during the selected time period.");
       }
-      requestedRoom.status = "unavailable";
-      await requestedRoom.save(); //update room status on room collection
 
-      const dataForDB = { ...payload, user: user.id };
+      // Check if there are any conflicting confirmed bookings from other users
+      const conflictingBooking = await Booking.findOne({
+        room: payload.room,
+        status: "confirmed",
+        $or: [
+          {
+            checkInDate: { $lte: payload.checkOutDate },
+            checkOutDate: { $gte: payload.checkInDate }
+          },
+        ],
+      }).session(session);
+
+      if (conflictingBooking) {
+        throw new AppError(409, "This room is already booked during the requested time.");
+      }
+
+      // Room status remains available for other requests until an admin confirms the booking
+      const dataForDB = { ...payload, user: user.id, status: "pending" };
       const result = await Booking.create([dataForDB], { session });
+
       return {
         statusCode: 200,
         success: true,
-        message: "Your booking has confirmed",
+        message: "Your booking request has been submitted for approval.",
         data: result,
       };
     });
@@ -58,7 +85,6 @@ const createBookingIntoDB = async (user: TDecodedUser, payload: TBooking) => {
       message: error.message || "Something Went Wrong",
       data: null,
     };
-    // throw new AppError(500, "Internal Server Error");
   }
 };
 

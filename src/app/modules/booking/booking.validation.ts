@@ -2,7 +2,6 @@ import { z } from "zod";
 
 const createBookingValidationSchema = z.object({
   body: z.object({
-    booking: z.object({
       //   user: z.string().min(1, { message: "User ID is required" }),
       room: z.string().min(1, { message: "Room ID is required" }),
       checkInDate: z.string({
@@ -19,7 +18,6 @@ const createBookingValidationSchema = z.object({
       //   { message: "Check-out date must be after check-in date" }
       // ),
       status: z.enum(["confirmed", "pending", "cancelled"]).default("pending"),
-    }),
   }),
 });
 

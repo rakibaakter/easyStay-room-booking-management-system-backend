@@ -13,11 +13,11 @@ const bookingSchema = new Schema<TBooking>({
     required: true,
   },
   checkInDate: {
-    type: String,
+    type: Date,
     required: true,
   },
   checkOutDate: {
-    type: String,
+    type: Date,
     required: true,
     // validate: {
     //   validator: function (value: Date) {

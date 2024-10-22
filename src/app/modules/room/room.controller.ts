@@ -20,6 +20,8 @@ const createRoom = catchAsync(async (req, res) => {
 
 // for get all api
 const getAllRoom = catchAsync(async (req, res) => {
+  // console.log("token from client", req.headers.authorization);
+  
   const result = await roomServices.getAllRoomFromDB();
 
   // send response
@@ -33,8 +35,9 @@ const getAllRoom = catchAsync(async (req, res) => {
 
 // for single get api
 const getRoomById = catchAsync(async (req, res) => {
+  
   const result = await roomServices.getSingleRoomByIdFromDB(req.params.id);
-
+  
   // send response
   sendResponse(res, {
     statusCode: 200,

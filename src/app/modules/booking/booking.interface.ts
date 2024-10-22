@@ -4,8 +4,8 @@ import { Types } from "mongoose";
 export interface TBooking {
   user: Types.ObjectId;
   room: Types.ObjectId;
-  checkInDate: string;
-  checkOutDate: string;
+  checkInDate: Date;
+  checkOutDate: Date;
   status: "confirmed" | "pending" | "cancelled";
 }
 

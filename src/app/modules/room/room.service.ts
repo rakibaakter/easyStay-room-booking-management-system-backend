@@ -15,7 +15,10 @@ const getAllRoomFromDB = async () => {
 
 // get single room by its id
 const getSingleRoomByIdFromDB = async (id: string) => {
+  console.log(id);
+  
   const result = await Room.findById(id);
+  console.log(result);
   return result;
 };
 

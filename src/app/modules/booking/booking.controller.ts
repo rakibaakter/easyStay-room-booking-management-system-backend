@@ -8,7 +8,7 @@ import { bookingServices } from "./booking.services";
 
 // for post api
 const createBooking = catchAsync(async (req, res) => {
-  const { booking } = req.body;
+  const booking  = req.body;
   const result = await bookingServices.createBookingIntoDB(
     req.user as TDecodedUser,
     booking
