@@ -6,8 +6,9 @@ import { roomServices } from "./room.service";
 
 // for post api
 const createRoom = catchAsync(async (req, res) => {
-  const { room: roomData } = req.body;
+  const roomData = req.body;
   const result = await roomServices.createRoomIntoDB(roomData);
+
 
   // send response
   sendResponse(res, {
@@ -20,7 +21,6 @@ const createRoom = catchAsync(async (req, res) => {
 
 // for get all api
 const getAllRoom = catchAsync(async (req, res) => {
-  // console.log("token from client", req.headers.authorization);
   
   const result = await roomServices.getAllRoomFromDB();
 

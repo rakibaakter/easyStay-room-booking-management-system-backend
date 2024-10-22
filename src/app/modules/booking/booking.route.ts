@@ -18,7 +18,7 @@ router.post(
 router.get("/", auth(USER_ROLE.admin), bookingControllers.getAllBooking);
 // get user specific bookings
 router.get(
-  "/my-bokings",
+  "/my-bookings",
   auth(USER_ROLE.user),
   bookingControllers.getUserBookings
 );
@@ -27,7 +27,7 @@ router.get("/:id", bookingControllers.getBookingById);
 // delete bookings by id
 router.delete(
   "/:id",
-  auth(USER_ROLE.admin),
+  auth(USER_ROLE.admin, USER_ROLE.user),
   bookingControllers.deleteBookingById
 );
 

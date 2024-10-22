@@ -10,7 +10,7 @@ const router = express.Router();
 router.post('/create-user', validateRequest(userValidations.createUserValidationSchema),userControllers.createUser);
 // router.post('/create-user',userControllers.createUser);
 
-router.get("/:id", auth(USER_ROLE.user), userControllers.getUserById)
+router.get("/:id", auth(USER_ROLE.user, USER_ROLE.admin), userControllers.getUserById)
 // router.get("/:id", userControllers.getUserById)
 
 
