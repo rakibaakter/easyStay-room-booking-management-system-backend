@@ -24,6 +24,8 @@ router.get(
 );
 // get single bookings by id
 router.get("/:id", bookingControllers.getBookingById);
+// update booking
+router.patch("/:id",auth(USER_ROLE.admin), bookingControllers.updateBooking);
 // delete bookings by id
 router.delete(
   "/:id",

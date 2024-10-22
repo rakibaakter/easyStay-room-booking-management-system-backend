@@ -146,6 +146,34 @@ const getSingleBookingByIdFromDB = async (id: string) => {
 };
 
 // update booking
+const approveBookingByAdmin = async (bookingId: string) => {
+  const session = await startSession();
+  return await session.withTransaction(async () => {
+    const booking = await Booking.findById(bookingId).session(session);
+
+    if (!booking || booking.status !== "pending") {
+      throw new AppError(404, "Booking not found or not pending");
+    }
+
+    const room = await Room.findById(booking.room).session(session);
+    if (!room || room.status === "unavailable") {
+      throw new AppError(409, "Room is already unavailable.");
+    }
+
+    // Update booking status and room availability
+    booking.status = "confirmed";
+    room.status = "unavailable";
+    await booking.save();
+    await room.save();
+
+    return {
+      statusCode: 200,
+      success: true,
+      message: "Booking has been confirmed",
+      data: booking,
+    };
+  });
+};
 
 // delete single booking by its id
 const deleteSingleBookingByIdFromDB = async (id: string) => {
@@ -171,5 +199,6 @@ export const bookingServices = {
   getAllBookingFromDB,
   getMyBookingsfromDB,
   getSingleBookingByIdFromDB,
+  approveBookingByAdmin,
   deleteSingleBookingByIdFromDB,
 };

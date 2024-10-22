@@ -68,6 +68,21 @@ const getBookingById = catchAsync(async (req, res) => {
   });
 });
 
+// for update booking
+const updateBooking = catchAsync(async (req, res) => {
+  const result = await bookingServices.approveBookingByAdmin(
+    req.params.id
+  );
+
+  // send response
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Booking info updated successfully!",
+    data: result,
+  });
+});
+
 // for delete api
 const deleteBookingById = catchAsync(async (req, res) => {
   const result = await bookingServices.deleteSingleBookingByIdFromDB(
@@ -87,6 +102,7 @@ export const bookingControllers = {
   createBooking,
   getAllBooking,
   getUserBookings,
+  updateBooking,
   getBookingById,
   deleteBookingById,
 };
